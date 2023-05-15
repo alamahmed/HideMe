@@ -1,0 +1,17 @@
+export const images = {
+  gallery: require("./gallery.png"),
+  gallery1: require("./picture.png"),
+  bg: require("./bg.jpg"),
+  bg1: require("./ui.jpg"),
+  camera: require("./camera.png"),
+  hideMe: require("./HideMe.png"),
+  loginPass: require("./login.png"),
+  whatsapp: require("./whatsapp.png"),
+  facebook: require("./facebook5.png"),
+  google: require("./google.png"),
+  bg2: require("./mobilebk.webp"),
+  bg3: require("./mobilebk2.webp"),
+  bg4: require("./blackBk.webp"),
+  phone: require("./call.png"),
+  setting: require("./setting.png"),
+};

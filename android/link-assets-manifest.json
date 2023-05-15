@@ -1,0 +1,33 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Alice-Regular.ttf",
+      "sha1": "7abf3b73f620de8e1242966e7079016bcecb4fe3"
+    },
+    {
+      "path": "src/assets/fonts/AnonymousPro-Bold.ttf",
+      "sha1": "bfc8d198336c84f11f43c33671de9e23ddf3d058"
+    },
+    {
+      "path": "src/assets/fonts/AnonymousPro-BoldItalic.ttf",
+      "sha1": "2bcf133316eba7c9838225a449680c178842dc8c"
+    },
+    {
+      "path": "src/assets/fonts/AnonymousPro-Italic.ttf",
+      "sha1": "6032e47a29201e3e2aaecb56f583d2741bb546c2"
+    },
+    {
+      "path": "src/assets/fonts/AnonymousPro-Regular.ttf",
+      "sha1": "e5a1581199fe0058ba03e322b9a4823e199dd2b6"
+    },
+    {
+      "path": "src/assets/fonts/Calligraffitti-Regular.ttf",
+      "sha1": "578fc847ec28c223da45884b9799026788b2db83"
+    },
+    {
+      "path": "src/assets/fonts/CedarvilleCursive-Regular.ttf",
+      "sha1": "7ef9e90cc18213b8779a16bc3fb84f1a6e610331"
+    }
+  ]
+}
