@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "./src/screens/Login";
+// import Login from "./src/screens/Login";
 import ValidateCredentials from "./src/screens/ValidateCredentials";
 import ChangeCredentials from "./src/screens/ChangeCredentials";
 import Dashboard from "./src/screens/Dashboard";
@@ -9,11 +9,11 @@ import Gallery from "./src/screens/Gallery";
 import Register from "./src/screens/Register";
 import Logout from "./src/screens/Logout";
 import { useSelector } from "react-redux";
-import { NativeModules, DeviceEventEmitter } from 'react-native'
-import InitNativeEvents from "./src/events/NativeEvents";
+// import { NativeModules } from 'react-native'
+// import InitNativeEvents from "./src/events/NativeEvents";
 import Setting from "./src/screens/Setting";
 
-const { LockNativeModule } = NativeModules;
+// const { LockNativeModule } = NativeModules;
 
 const App = (props) => {
 
