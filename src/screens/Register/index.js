@@ -20,6 +20,7 @@ import InitNativeEvents from "../../events/NativeEvents";
 const Register = (props) => {
   InitNativeEvents(props)
   const ref_PinInput = useRef(null);
+  const ref_PasswordInput = useRef(null);
   const [isLoginWithPIN, setIsLoginWithPIN] = useState(true);
   const [pin, setPin] = useState("");
   const [password, setPassword] = useState("");
@@ -56,13 +57,17 @@ const Register = (props) => {
         </View> */}
 
         <View style={styles.cenTop}>
-          <TextInput
-            secureTextEntry
-            placeholder="Enter Password"
-            placeholderTextColor={"#fff"}
-            style={styles.inputPass}
+          <SmoothPinCodeInput
+            ref={ref_PasswordInput}
+            placeholder={<View style={styles.pinPlaceholder} />}
+            mask={<View style={styles.pinMask} />}
+            maskDelay={1000}
+            password={true}
+            cellStyle={styles.cellStyle}
+            cellStyleFocused={styles.cellStyleFocused}
+            cellSpacing={10}
             value={password}
-            onChangeText={(val) => setPassword(val)}
+            onTextChange={(val) => setPassword(val)}
           />
           <View style={{ marginVertical: 10 }} />
           <SmoothPinCodeInput

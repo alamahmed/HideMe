@@ -15,14 +15,17 @@ import { images } from "../../assets/images";
 import { useDispatch } from "react-redux";
 import { changePassword } from "../../redux/slices/password";
 import { changePin } from "../../redux/slices/pin";
+import { NativeModules } from 'react-native';
 import InitNativeEvents from "../../events/NativeEvents";
 
 
+// const { MyJavaClass } = NativeModules;
 
 const ChangeCredentials = (props) => {
     InitNativeEvents(props)
-    const { isLoginWithPIN } = props.route.params || { isLoginWithPIN: true };
+    const { isLoginWithPIN } = props.route.params;
     const ref_PinInput = useRef(null);
+    const ref_PasswordInput = useRef(null);
     const [pin, setPin] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
@@ -36,7 +39,6 @@ const ChangeCredentials = (props) => {
                 Alert.alert("Please enter a valid Pin");
             }
         } else {
-
             if (password !== "") {
                 dispatch(changePassword(password));
                 props.navigation.replace("Setting");
@@ -56,7 +58,7 @@ const ChangeCredentials = (props) => {
                     resizeMode="center"
                 />
                 <Text style={styles.headline}>
-                    Enter New {isLoginWithPIN ? "PIN" : "Password"} Here
+                    Enter new {isLoginWithPIN ? "Application" : "Android"} PIN here
                 </Text>
                 <View style={styles.cenTop}>
                     {isLoginWithPIN ?
@@ -72,20 +74,24 @@ const ChangeCredentials = (props) => {
                             value={pin}
                             onTextChange={(code) => setPin(code)}
                         /> :
-                        <TextInput
-                            secureTextEntry
-                            placeholder="Enter Password"
-                            placeholderTextColor={"#fff"}
-                            style={styles.inputPass}
+                        <SmoothPinCodeInput
+                            ref={ref_PasswordInput}
+                            placeholder={<View style={styles.pinPlaceholder} />}
+                            mask={<View style={styles.pinMask} />}
+                            maskDelay={1000}
+                            password={true}
+                            cellStyle={styles.cellStyle}
+                            cellStyleFocused={styles.cellStyleFocused}
+                            cellSpacing={10}
                             value={password}
-                            onChangeText={(val) => setPassword(val)}
+                            onTextChange={(val) => setPassword(val)}
                         />
                     }
                 </View>
 
                 <TouchableOpacity style={styles.btnLogin} onPress={() => onPressLogin()}>
                     <Text style={{ fontWeight: "bold", fontSize: 20, color: "#000000" }}>
-                        Update {isLoginWithPIN ? "PIN" : "Password"}
+                        Update {isLoginWithPIN ? "Application" : "Android"} PIN
                     </Text>
                 </TouchableOpacity>
             </View>

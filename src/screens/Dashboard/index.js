@@ -109,30 +109,56 @@ const Dashboard = (props) => {
               // flexWrap: "wrap",
             }}
           >
-            <TouchableOpacity
-              style={{
-                // backgroundColor: "rgba(0,0,0,0.7)",
-                borderRadius: 10,
-                padding: normalized.wp("1%"),
-                paddingVertical: normalized.hp("1%"),
-                alignItems: "center",
-                width: normalized.wp("15%"),
-                marginLeft: normalized.wp("5%"),
-              }}
-              onPress={() => {
-                props?.navigation?.navigate("Gallery");
-                // Linking.openURL('tel:119');
-              }}
-            >
-              <Image
-                source={images.gallery1}
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <TouchableOpacity
                 style={{
-                  width: normalized.wp("10%"),
-                  height: normalized.wp("10%"),
+                  borderRadius: 10,
+                  padding: normalized.wp("1%"),
+                  paddingVertical: normalized.hp("1%"),
+                  alignItems: "center",
+                  width: normalized.wp("15%"),
+                  marginLeft: normalized.wp("5%"),
                 }}
-                resizeMode="center"
-              />
-              {/* <Text
+                onPress={() => {
+                  props?.navigation?.navigate("Gallery");
+                }}
+              >
+                <Image
+                  source={images.gallery1}
+                  style={{
+                    width: normalized.wp("10%"),
+                    height: normalized.wp("10%"),
+                    borderRadius: 20,
+                  }}
+                  resizeMode="center"
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{
+                  borderRadius: 10,
+                  padding: normalized.wp("1%"),
+                  paddingVertical: normalized.hp("1%"),
+                  alignItems: "center",
+                  width: normalized.wp("15%"),
+                  marginLeft: normalized.wp("2%"),
+                }}
+                onPress={() => {
+                  props?.navigation?.navigate("Setting");
+                }}
+              >
+                <Image
+                  source={images.setting}
+                  style={{
+                    width: normalized.wp("11%"),
+                    height: normalized.wp("11%"),
+                  }}
+                  resizeMode="center"
+                />
+              </TouchableOpacity>
+            </View>
+
+            {/* <Text
               style={{
                 color: "#fff",
                 fontWeight: "600",
@@ -141,31 +167,8 @@ const Dashboard = (props) => {
             >
               Gallery
             </Text> */}
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                // backgroundColor: "rgba(0,0,0,0.7)",
-                borderRadius: 10,
-                padding: normalized.wp("1%"),
-                paddingVertical: normalized.hp("1%"),
-                alignItems: "center",
-                width: normalized.wp("15%"),
-                marginLeft: normalized.wp("5%"),
-              }}
-              onPress={() => {
-                props?.navigation?.navigate("Setting");
-                // Linking.openURL('tel:119');
-              }}
-            >
-              <Image
-                source={images.setting}
-                style={{
-                  width: normalized.wp("10%"),
-                  height: normalized.wp("10%"),
-                }}
-                resizeMode="center"
-              />
-              {/* <Text
+
+            {/* <Text
               style={{
                 color: "#fff",
                 fontWeight: "600",
@@ -174,7 +177,6 @@ const Dashboard = (props) => {
             >
               Gallery
             </Text> */}
-            </TouchableOpacity>
           </View>
         </View>
         <View
@@ -226,8 +228,8 @@ const Dashboard = (props) => {
             <Image
               source={images.camera}
               style={{
-                width: normalized.wp("10%"),
-                height: normalized.wp("10%"),
+                width: normalized.wp("12%"),
+                height: normalized.wp("12%"),
               }}
               resizeMode="center"
             />
@@ -243,9 +245,15 @@ const Dashboard = (props) => {
               width: normalized.wp("15%"),
               marginLeft: normalized.wp("2%"),
             }}
-            onPress={() =>
-              Linking.openURL("https://wa.me/?text=Welcome%20to%20my%20chat")
-            }
+            onPress={() => {
+              if (Linking.canOpenURL("whatsapp://send")) {
+                Linking.openURL(
+                  "whatsapp://send?text=Welcome%20to%20my%20chat&app=whatsapp"
+                );
+              } else {
+                alert("WhatsApp is not installed on your device.");
+              }
+            }}
           >
             <Image
               source={images.whatsapp}

@@ -18,6 +18,7 @@ import InitNativeEvents from "../../events/NativeEvents";
 const Login = (props) => {
   InitNativeEvents(props)
   const ref_PinInput = useRef(null);
+  const ref_PasswordInput = useRef(null);
   const [isLoginWithPIN, setIsLoginWithPIN] = useState(true);
   const { pinChange } = useSelector((state) => state.pinReducer); // getting the pin
   const { passwordChange } = useSelector((state) => state.passwordReducer); // getting the gallery
@@ -68,13 +69,17 @@ const Login = (props) => {
               onTextChange={(code) => setPin(code)}
             />
           ) : (
-            <TextInput
-              secureTextEntry
-              placeholder="Enter Password"
-              placeholderTextColor={"#fff"}
-              style={styles.inputPass}
+            <SmoothPinCodeInput
+              ref={ref_PasswordInput}
+              placeholder={<View style={styles.pinPlaceholder} />}
+              mask={<View style={styles.pinMask} />}
+              maskDelay={1000}
+              password={true}
+              cellStyle={styles.cellStyle}
+              cellStyleFocused={styles.cellStyleFocused}
+              cellSpacing={10}
               value={password}
-              onChangeText={(val) => setPassword(val)}
+              onTextChange={(val) => setPassword(val)}
             />
           )}
         </View>
@@ -83,7 +88,7 @@ const Login = (props) => {
           style={styles.txtLoginWith}
           onPress={() => setIsLoginWithPIN(!isLoginWithPIN)}
         >
-          Login with {isLoginWithPIN ? "Password" : "PIN"}
+          Login with {isLoginWithPIN ? "Android" : "Application"} PIN
         </Text>
         <TouchableOpacity style={styles.btnLogin} onPress={onPressLogin}>
           <Text style={{ fontWeight: "bold", fontSize: 20, color: "#000000" }}>

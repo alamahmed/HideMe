@@ -14,4 +14,5 @@ export const images = {
   bg4: require("./blackBk.webp"),
   phone: require("./call.png"),
   setting: require("./setting.png"),
+  exit: require("./exit.png"),
 };

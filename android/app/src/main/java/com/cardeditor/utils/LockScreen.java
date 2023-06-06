@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.provider.Settings;
 
-
 /**
  * Created by andika on 2/19/17.
  */
@@ -14,63 +13,62 @@ import android.provider.Settings;
 public class LockScreen {
     private static LockScreen singleton;
     Context context;
-    boolean disableHomeButton=false;
-
+    boolean disableHomeButton = false;
 
     SharedPreferences prefs = null;
 
-
     public static LockScreen getInstance() {
-        if(singleton==null){
+        if (singleton == null) {
             singleton = new LockScreen();
 
         }
         return singleton;
     }
-    public void init(Context context){
-        this.context = context;
 
+    public void init(Context context) {
+        this.context = context;
 
     }
 
-    public void init(Context context, boolean disableHomeButton){
+    public void init(Context context, boolean disableHomeButton) {
         this.context = context;
         this.disableHomeButton = disableHomeButton;
 
     }
 
-    private void showSettingAccesability(){
-        if(!isMyServiceRunning(LockWindowAccessibilityService.class)) {
+    private void showSettingAccesability() {
+        if (!isMyServiceRunning(LockWindowAccessibilityService.class)) {
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }
     }
 
-
-    public void active(){
-        if(disableHomeButton){
+    public void active() {
+        if (disableHomeButton) {
             showSettingAccesability();
         }
 
-        if(context!=null) {
+        if (context != null) {
             context.startService(new Intent(context, LockscreenService.class));
         }
 
     }
 
-    public void deactivate(){
-        if(context!=null) {
+    public void deactivate() {
+        if (context != null) {
             context.stopService(new Intent(context, LockscreenService.class));
         }
     }
-    public boolean isActive(){
-        if(context!=null) {
+
+    public boolean isActive() {
+        if (context != null) {
             return isMyServiceRunning(LockscreenService.class);
-        }else{
+        } else {
             return false;
         }
     }
+
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -80,7 +78,5 @@ public class LockScreen {
         }
         return false;
     }
-
-
 
 }

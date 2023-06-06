@@ -19,27 +19,26 @@ public class ActivtyAsk extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        toggleButton = (ToggleButton)findViewById(R.id.toggleButton);
-        LockScreen.getInstance().init(this,true);
-        if(LockScreen.getInstance().isActive()){
+        toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
+        LockScreen.getInstance().init(this, true);
+        if (LockScreen.getInstance().isActive()) {
             toggleButton.setChecked(true);
-        }else{
+        } else {
             toggleButton.setChecked(false);
         }
 
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                if(checked){
+                if (checked) {
 
                     LockScreen.getInstance().active();
-                }else{
+                } else {
                     LockScreen.getInstance().deactivate();
                 }
             }
         });
 
     }
-
 
 }
