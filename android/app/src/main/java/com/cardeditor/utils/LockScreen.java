@@ -20,14 +20,12 @@ public class LockScreen {
     public static LockScreen getInstance() {
         if (singleton == null) {
             singleton = new LockScreen();
-
         }
         return singleton;
     }
 
     public void init(Context context) {
         this.context = context;
-
     }
 
     public void init(Context context, boolean disableHomeButton) {

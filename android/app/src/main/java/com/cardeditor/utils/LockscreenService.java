@@ -20,18 +20,12 @@ import com.cardeditor.LockScreenActivity;
 import com.cardeditor.MainActivity;
 import com.cardeditor.R;
 
-
-
 public class LockscreenService extends Service {
     private final String TAG = "LockscreenService";
     private int mServiceStartId = 0;
     private Context mContext = null;
 
     private NotificationManager mNM;
-
-
-
-
 
     private BroadcastReceiver mLockscreenReceiver = new BroadcastReceiver() {
         @Override
@@ -59,15 +53,13 @@ public class LockscreenService extends Service {
         }
     }
 
-
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
-//        mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-//        showNotification();
+        // mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        // showNotification();
     }
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -82,23 +74,17 @@ public class LockscreenService extends Service {
         }
         return LockscreenService.START_STICKY;
 
-
     }
-
-
-
-
 
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
-
     @Override
     public void onDestroy() {
         stateRecever(false);
-//        mNM.cancel(((LockApplication) getApplication()).notificationId);
+        // mNM.cancel(((LockApplication) getApplication()).notificationId);
     }
 
     private void startLockscreenActivity() {

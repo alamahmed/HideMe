@@ -1,24 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { normalized } from "../../utils/constants";
 import {
-  Alert,
   View,
-  Image,
   TouchableHighlight,
   TouchableOpacity,
-  TextInput,
   Text,
-  ImageBackground,
-  StyleSheet,
   Switch,
   NativeModules,
-  Button,
 } from "react-native";
-import SmoothPinCodeInput from "react-native-smooth-pincode-input";
-import { images } from "../../assets/images";
-import { useSelector } from "react-redux";
-import { normalized } from "../../utils/constants";
 
 const { LockNativeModule } = NativeModules;
 

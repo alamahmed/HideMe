@@ -7,57 +7,56 @@ import {
     Text,
     ImageBackground,
     StyleSheet,
-    BackHandler
+    BackHandler,
 } from "react-native";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { normalized } from "../../utils/constants";
 import SmoothPinCodeInput from "react-native-smooth-pincode-input";
 import styles from "./styles";
 import { images } from "../../assets/images";
 import { useSelector } from "react-redux";
-import InitNativeEvents from "../../events/NativeEvents";
 
 
 const Logout = (props) => {
-    InitNativeEvents(props)
     const ref_PinInput = useRef(null);
     const [password, setPassword] = useState("");
     const { passwordChange } = useSelector((state) => state.passwordReducer); // getting the pin
 
-    useEffect(() => {
-        const backHandler = () => {
-            return true; // Prevent default back button behavior
-        };
-
-        const backHandlerSubscription = props.navigation.addListener('beforeRemove', (e) => {
-            // Prevent default back navigation if the user hasn't entered the correct PIN
-            if (pin !== pinChange) {
-                e.preventDefault();
-                Alert.alert("Warning", "Please enter the correct PIN to logout.");
-            }
-        });
-
-        return () => {
-            backHandlerSubscription();
-        };
-    }, [pin, pinChange, props.navigation]);
-
-
     const checkCredentials = () => {
-        console.log(passwordChange, "passwordChange");
-        console.log(password, "password that I entered");
         if (password === passwordChange) {
-            BackHandler.exitApp();
             setPassword('');
+            BackHandler.exitApp();
             // props.navigation.replace("Dashboard");
         } else {
             setPassword('');
             Alert.alert("WRONG Credentials!!!", "Please enter valid PIN");
         }
     };
+
+    const handleBackButton = () => {
+        props.navigation.goBack();
+    };
+
     return (
         <>
             <View style={styles.container}>
                 <ImageBackground source={images.bg2} style={StyleSheet.absoluteFill} />
                 <View style={styles.centeredView}>
+                    <View
+                        style={{
+                            paddingLeft: 20,
+                            flexDirection: "row",
+                            alignItems: "center",
+                        }}
+                    >
+                        <TouchableOpacity onPress={handleBackButton}>
+                            <FontAwesomeIcon icon={faArrowLeft} size={20} color="#fff" />
+                        </TouchableOpacity>
+                        <Text style={{ color: "#fff", fontSize: 20, marginLeft: 10 }}>
+                            Back
+                        </Text>
+                    </View>
                     <Image
                         source={images.loginPass}
                         style={styles.loginImg}

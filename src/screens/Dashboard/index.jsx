@@ -63,7 +63,6 @@ const Dashboard = (props) => {
               borderBottomLeftRadius: 60,
               borderRadius: 20,
               justifyContent: "space-between",
-              // alignSelf: "center",
               padding: normalized.hp("3%"),
               alignItems: "center",
             }}
@@ -83,7 +82,6 @@ const Dashboard = (props) => {
           </View>
           <TouchableOpacity
             style={{
-              // backgroundColor: "rgba(0,0,0,0.7)",
               borderRadius: 10,
               padding: normalized.wp("1%"),
               paddingVertical: normalized.hp("1%"),
@@ -157,26 +155,6 @@ const Dashboard = (props) => {
                 />
               </TouchableOpacity>
             </View>
-
-            {/* <Text
-              style={{
-                color: "#fff",
-                fontWeight: "600",
-                marginTop: normalized.hp("1%"),
-              }}
-            >
-              Gallery
-            </Text> */}
-
-            {/* <Text
-              style={{
-                color: "#fff",
-                fontWeight: "600",
-                marginTop: normalized.hp("1%"),
-              }}
-            >
-              Gallery
-            </Text> */}
           </View>
         </View>
         <View
@@ -185,12 +163,10 @@ const Dashboard = (props) => {
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            // flexWrap: "wrap",
           }}
         >
           <TouchableOpacity
             style={{
-              // backgroundColor: "rgba(0,0,0,0.7)",
               borderRadius: 10,
               padding: normalized.wp("1%"),
               paddingVertical: normalized.hp("1%"),
@@ -200,9 +176,6 @@ const Dashboard = (props) => {
             }}
             onPress={
               () => Linking.openURL("tel:")
-              // "https://wa.me/?text=Welcome%20to%20my%20chat"
-              // "https://fb://"
-              // `whatsapp://send?phone=03048700192&text=${"Hi Message from RN App"}`
             }
           >
             <Image
@@ -216,7 +189,6 @@ const Dashboard = (props) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              // backgroundColor: "rgba(0,0,0,0.7)",
               borderRadius: 10,
               padding: normalized.wp("1%"),
               paddingVertical: normalized.hp("1%"),
@@ -237,7 +209,6 @@ const Dashboard = (props) => {
 
           <TouchableOpacity
             style={{
-              // backgroundColor: "rgba(0,0,0,0.7)",
               borderRadius: 10,
               padding: normalized.wp("1%"),
               paddingVertical: normalized.hp("1%"),
@@ -264,10 +235,8 @@ const Dashboard = (props) => {
               resizeMode="center"
             />
           </TouchableOpacity>
-
           <TouchableOpacity
             style={{
-              // backgroundColor: "rgba(0,0,0,0.7)",
               borderRadius: 10,
               padding: normalized.wp("1%"),
               paddingVertical: normalized.hp("1%"),
@@ -275,12 +244,12 @@ const Dashboard = (props) => {
               width: normalized.wp("15%"),
               marginLeft: normalized.wp("2%"),
             }}
-            onPress={() =>
+            onPress={() => {
+              console.log("Facebook btn pressed");
               Linking.openURL(
-                // "https://wa.me/?text=Welcome%20to%20my%20chat"
                 "fb://page/"
-                // `whatsapp://send?phone=03048700192&text=${"Hi Message from RN App"}`
               )
+            }
             }
           >
             <Image

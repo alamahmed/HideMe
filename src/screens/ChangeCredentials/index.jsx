@@ -1,55 +1,94 @@
 import React, { useState, useRef } from "react";
-import { Alert, View, Image, TouchableOpacity, Text, ImageBackground, StyleSheet } from "react-native";
-import SmoothPinCodeInput from "react-native-smooth-pincode-input";
+import {
+    Alert,
+    View,
+    Image,
+    TouchableOpacity,
+    Text,
+    ImageBackground,
+    StyleSheet,
+    NativeModules,
+} from "react-native";
 import styles from "./styles";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import SmoothPinCodeInput from "react-native-smooth-pincode-input";
 import { images } from "../../assets/images";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { changePassword } from "../../redux/slices/password";
+import { changePin } from "../../redux/slices/pin";
 import InitNativeEvents from "../../events/NativeEvents";
 
-const ValidateCredentials = (props) => {
-    InitNativeEvents(props);
+
+const ChangeCredentials = (props) => {
+    InitNativeEvents(props)
+    const { LockNativeModule } = NativeModules;
+    const { isLoginWithPIN } = props.route.params;
     const ref_PinInput = useRef(null);
     const ref_PasswordInput = useRef(null);
     const [pin, setPin] = useState("");
     const [password, setPassword] = useState("");
-    const [isLoginWithPIN, setIsLoginWithPIN] = useState(true);
-    const { pinChange } = useSelector((state) => state.pinReducer);
-    const { passwordChange } = useSelector((state) => state.passwordReducer);
+    const dispatch = useDispatch();
 
-    const checkCredentials = () => {
+    const onPressLogin = () => {
         if (isLoginWithPIN) {
-            if (pin === pinChange) {
+            if (pin !== "") {
+                dispatch(changePin(pin));
+                LockNativeModule.SetPin(pin, isLoginWithPIN)
                 setPin('');
-                props.navigation.replace("ChangeCredentials", { isLoginWithPIN })
-            } else {
+                props.navigation.replace("Setting");
+            }
+            else {
                 setPin('');
-                Alert.alert("WRONG Credentials!!!", "Please enter valid PIN");
+                Alert.alert("Please enter a valid Pin");
             }
         } else {
-            if (password === passwordChange) {
+            if (password !== "") {
                 setPassword('');
-                props.navigation.replace("ChangeCredentials", { isLoginWithPIN })
-            } else {
+                LockNativeModule.SetPin(password, isLoginWithPIN)
+                dispatch(changePassword(password));
+                props.navigation.replace("Setting");
+            }
+            else {
                 setPassword('');
-                Alert.alert("WRONG Credentials!!!", "Please enter valid Password");
+                Alert.alert("Please enter a valid Password");
             }
         }
     };
+
+    const handleBackButton = () => {
+        props.navigation.goBack();
+    };
+
 
     return (
         <View style={styles.container}>
             <ImageBackground source={images.bg2} style={StyleSheet.absoluteFill} />
             <View style={styles.centeredView}>
+                <View
+                    style={{
+                        padding: 20,
+                        flexDirection: "row",
+                        alignItems: "center",
+                    }}
+                >
+                    <TouchableOpacity onPress={handleBackButton}>
+                        <FontAwesomeIcon icon={faArrowLeft} size={20} color="#fff" />
+                    </TouchableOpacity>
+                    <Text style={{ color: "#fff", fontSize: 20, marginLeft: 10 }}>
+                        Back
+                    </Text>
+                </View>
                 <Image
                     source={images.loginPass}
                     style={styles.loginImg}
                     resizeMode="center"
                 />
                 <Text style={styles.headline}>
-                    Enter {isLoginWithPIN ? "Application" : "Android"} Your Pin
+                    Enter new {isLoginWithPIN ? "Application" : "Android"} PIN here
                 </Text>
                 <View style={styles.cenTop}>
-                    {isLoginWithPIN ? (
+                    {isLoginWithPIN ?
                         <SmoothPinCodeInput
                             ref={ref_PinInput}
                             placeholder={<View style={styles.pinPlaceholder} />}
@@ -61,8 +100,7 @@ const ValidateCredentials = (props) => {
                             cellSpacing={10}
                             value={pin}
                             onTextChange={(code) => setPin(code)}
-                        />
-                    ) : (
+                        /> :
                         <SmoothPinCodeInput
                             ref={ref_PasswordInput}
                             placeholder={<View style={styles.pinPlaceholder} />}
@@ -75,22 +113,17 @@ const ValidateCredentials = (props) => {
                             value={password}
                             onTextChange={(val) => setPassword(val)}
                         />
-                    )};
+                    }
                 </View>
-                <TouchableOpacity style={styles.btnLogin} onPress={checkCredentials}>
+
+                <TouchableOpacity style={styles.btnLogin} onPress={() => onPressLogin()}>
                     <Text style={{ fontWeight: "bold", fontSize: 20, color: "#000000" }}>
-                        -&gt;
+                        Update {isLoginWithPIN ? "Application" : "Android"} PIN
                     </Text>
                 </TouchableOpacity>
             </View>
-            <Text
-                style={styles.txtLoginWith}
-                onPress={() => setIsLoginWithPIN(!isLoginWithPIN)}
-            >
-                Change {isLoginWithPIN ? "Android" : "Application"} PIN
-            </Text>
         </View>
     );
-};
+}
 
-export default ValidateCredentials;
+export default ChangeCredentials;

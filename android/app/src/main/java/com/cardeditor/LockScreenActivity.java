@@ -1,3 +1,6 @@
+package com.cardeditor;
+
+import android.content.SharedPreferences;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -5,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -13,35 +17,56 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
+import com.facebook.react.bridge.ReactMethod;
 
 public class LockScreenActivity extends ReactActivity {
 
-    private String pincode = "";
-    private final String androidPin = "1234";
-    private final String applicationPin = "7896";
+    private static LockScreenActivity singleton;
+    private String androidPin;
+    private String applicationPin;
+    public String pincode = "";
+    Context context;
+    ImageView dot1;
+    ImageView dot2;
+    ImageView dot3;
+    ImageView dot4;
 
-    private ImageView[] dots = new ImageView[4];
+    public void updatePin(String value, boolean isLoginWithPIN) {
+        if (isLoginWithPIN) {
+            applicationPin = value;
+        } else {
+            androidPin = value;
+        }
+    }
 
-    private class ButtonTouchListener implements View.OnTouchListener {
+    public String getApplicationPin() {
+        return applicationPin;
+    }
+
+    public void setBothPin(String pin1, String pin2) {
+        androidPin = pin1;
+        applicationPin = pin2;
+    }
+
+    public class ButtonTouchListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    // Update opacity level of button background drawable
+                    // update opacity level of button background drawable
                     v.getBackground().setAlpha(100); // 50% opacity
                     break;
                 case MotionEvent.ACTION_UP:
-                    // Reset opacity level of button background drawable
+                    // reset opacity level of button background drawable
                     v.getBackground().setAlpha(255); // 100% opacity
                     break;
             }
@@ -49,7 +74,8 @@ public class LockScreenActivity extends ReactActivity {
         }
     }
 
-    private void unlockTrigger() {
+    public void unlockTrigger() {
+
         ReactInstanceManager mReactInstanceManager = getReactNativeHost().getReactInstanceManager();
         ReactApplicationContext reactContext = (ReactApplicationContext) mReactInstanceManager.getCurrentReactContext();
 
@@ -63,26 +89,38 @@ public class LockScreenActivity extends ReactActivity {
                 .emit("triggerUnlock", payload);
     }
 
-    private void vibrateDevice() {
+    public void vibrateDevice() {
+
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        // Vibrate for 200 milliseconds
+        // Vibrate for 500 milliseconds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             v.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
-            // Deprecated in API 26
+            // deprecated in API 26
             v.vibrate(200);
         }
     }
 
-    private void setPin(String num) {
-        if (num == "-1" && pincode.length() > 0) {
-            pincode = pincode.substring(0, pincode.length() - 1);
-            dots[pincode.length() - 1].setBackgroundResource(R.drawable.outlinedot);
-        } else if (pincode.length() < 4) {
+    public void setPin(String num) {
+        if (pincode.length() <= 4) {
             pincode += num;
-            dots[pincode.length() - 1].setBackgroundResource(R.drawable.filldot);
+        }
+        if (pincode.length() == 1) {
+            dot1.setBackgroundResource(R.drawable.filldot);
+        }
+        if (pincode.length() == 2) {
+            dot2.setBackgroundResource(R.drawable.filldot);
+        }
+        if (pincode.length() == 3) {
+            dot3.setBackgroundResource(R.drawable.filldot);
         }
         if (pincode.length() == 4) {
+
+            dot4.setBackgroundResource(R.drawable.filldot);
+
+            SharedPreferences sharedPref = getSharedPreferences("com.cardeditor.preferences", Context.MODE_PRIVATE);
+            String androidPin = sharedPref.getString("androidPin", "");
+            String applicationPin = sharedPref.getString("applicationPin", "");
             if (pincode.equals(androidPin)) {
                 finish();
             } else if (pincode.equals(applicationPin)) {
@@ -94,9 +132,10 @@ public class LockScreenActivity extends ReactActivity {
                 vibrateDevice();
                 Toast.makeText(getApplicationContext(), "Wrong Passcode", Toast.LENGTH_SHORT).show();
             }
-            for (ImageView dot : dots) {
-                dot.setBackgroundResource(R.drawable.outlinedot);
-            }
+            dot1.setBackgroundResource(R.drawable.outlinedot);
+            dot2.setBackgroundResource(R.drawable.outlinedot);
+            dot3.setBackgroundResource(R.drawable.outlinedot);
+            dot4.setBackgroundResource(R.drawable.outlinedot);
             pincode = "";
         }
     }
@@ -104,33 +143,106 @@ public class LockScreenActivity extends ReactActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CreateLockScreen();
+    }
+
+    public void CreateLockScreen() {
+
         setContentView(R.layout.activity_main);
+        Button btn_0 = (Button) findViewById(R.id.button_0);
+        Button btn_1 = (Button) findViewById(R.id.button_1);
+        Button btn_2 = (Button) findViewById(R.id.button_2);
+        Button btn_3 = (Button) findViewById(R.id.button_3);
+        Button btn_4 = (Button) findViewById(R.id.button_4);
+        Button btn_5 = (Button) findViewById(R.id.button_5);
+        Button btn_6 = (Button) findViewById(R.id.button_6);
+        Button btn_7 = (Button) findViewById(R.id.button_7);
+        Button btn_8 = (Button) findViewById(R.id.button_8);
+        Button btn_9 = (Button) findViewById(R.id.button_9);
 
-        int startNumber = 0; // Starting number for button labels
-        int buttonCount = 10; // Number of buttons to handle
+        dot1 = (ImageView) findViewById(R.id.dot1);
+        dot2 = (ImageView) findViewById(R.id.dot2);
+        dot3 = (ImageView) findViewById(R.id.dot3);
+        dot4 = (ImageView) findViewById(R.id.dot4);
 
-        ButtonTouchListener buttonTouchListener = new ButtonTouchListener();
-
-        for (int i = 0; i < buttonCount; i++) {
-            int buttonId = getResources().getIdentifier("btn_" + i, "id", getPackageName());
-            Button button = findViewById(buttonId);
-            button.setOnTouchListener(buttonTouchListener);
-            final String label = String.valueOf(startNumber + i);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    setPin(label);
-                }
-            });
-        }
-        int buttonId = getResources().getIdentifier("btn_remove", "id", getPackageName());
-        Button button = findViewById(buttonId);
-        button.setOnTouchListener(buttonTouchListener);
-        final String label = String.valueOf("<-");
-        button.setOnClickListener(new View.OnClickListener() {
+        btn_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setPin("-1");
+                setPin("1");
+            }
+        });
+
+        btn_1.setOnTouchListener(new ButtonTouchListener());
+        btn_2.setOnTouchListener(new ButtonTouchListener());
+        btn_3.setOnTouchListener(new ButtonTouchListener());
+        btn_4.setOnTouchListener(new ButtonTouchListener());
+        btn_5.setOnTouchListener(new ButtonTouchListener());
+        btn_6.setOnTouchListener(new ButtonTouchListener());
+        btn_7.setOnTouchListener(new ButtonTouchListener());
+        btn_8.setOnTouchListener(new ButtonTouchListener());
+        btn_9.setOnTouchListener(new ButtonTouchListener());
+        btn_0.setOnTouchListener(new ButtonTouchListener());
+
+        btn_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setPin("2");
+            }
+        });
+
+        btn_3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setPin("3");
+            }
+        });
+
+        btn_4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setPin("4");
+            }
+        });
+
+        btn_5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setPin("5");
+            }
+        });
+
+        btn_6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setPin("6");
+            }
+        });
+
+        btn_7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setPin("7");
+            }
+        });
+
+        btn_8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setPin("8");
+            }
+        });
+
+        btn_9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setPin("9");
+            }
+        });
+
+        btn_0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setPin("0");
             }
         });
 
@@ -141,8 +253,9 @@ public class LockScreenActivity extends ReactActivity {
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
-        // This works only for Android 4.4+
+        // This work only for android 4.4+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
             getWindow().getDecorView().setSystemUiVisibility(flags);
 
             // Code below is to handle presses of Volume up or Volume down.
@@ -150,6 +263,7 @@ public class LockScreenActivity extends ReactActivity {
             // show up and won't hide
             final View decorView = getWindow().getDecorView();
             decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+
                 @Override
                 public void onSystemUiVisibilityChange(int visibility) {
                     if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
@@ -173,6 +287,7 @@ public class LockScreenActivity extends ReactActivity {
         getWindow().getDecorView()
                 .setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         super.onAttachedToWindow();
+
     }
 
     @Override
@@ -211,7 +326,8 @@ public class LockScreenActivity extends ReactActivity {
 
     @Override
     public void onBackPressed() {
-        // Disable the back button functionality
+        // Log.d("LOG_APP", "onBackPressed: back button pressed ");
+        // Toast.makeText(this, "back button pressed", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -231,4 +347,5 @@ public class LockScreenActivity extends ReactActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
 }

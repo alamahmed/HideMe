@@ -8,7 +8,7 @@ const InitNativeEvents = (props) => {
     // const navigation = useNavigation();
 
     DeviceEventEmitter.addListener('triggerUnlock', (data) => {
-        console.log("working");
+        // console.log("working");
         props.navigation.replace("Dashboard")
     });
 

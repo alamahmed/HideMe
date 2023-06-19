@@ -9,16 +9,47 @@ import {
 import ImageView from "react-native-image-viewing";
 import { FlatGrid } from "react-native-super-grid";
 import FastImage from "react-native-fast-image";
-import { normalized, AppColors, vectorIcon } from "../../utils/constants";
-import { useDispatch, useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { AppColors, vectorIcon } from "../../utils/constants";
+import { useSelector } from "react-redux";
 import { images } from "../../assets/images";
+import { normalized } from "../../utils/constants";
 
 const Gallery = (props) => {
   const { galleryImages } = useSelector((state) => state.galleryReducer); // getting the gallery
   const [showImg, setShowImg] = useState({ visible: false, index: 0 });
+
+  const handleBackButton = () => {
+    props.navigation.goBack();
+  };
+
+
   return (
     <View style={styles.MainView}>
       <ImageBackground source={images.bg2} style={StyleSheet.absoluteFill} />
+      <View
+        style={{
+          padding: 20,
+          marginBottom: 30,
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        <TouchableOpacity onPress={handleBackButton}>
+          <FontAwesomeIcon icon={faArrowLeft} size={20} color="#fff" />
+        </TouchableOpacity>
+        <View>
+          <Text
+            style={{
+              color: "#fff",
+              fontSize: 20,
+              marginLeft: 10,
+            }}>
+            Gallery
+          </Text>
+        </View>
+      </View>
 
       <View style={styles.setView}>
         <FlatGrid
@@ -122,7 +153,7 @@ const Gallery = (props) => {
           backgroundColor="#fff"
         />
       </View>
-    </View>
+    </View >
   );
 };
 
