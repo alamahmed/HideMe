@@ -13,6 +13,8 @@ export const images = {
   bg3: require("./mobilebk2.webp"),
   bg4: require("./blackBk.webp"),
   phone: require("./call.png"),
-  setting: require("./setting.png"),
+  setting: require("./Calculator-icon.png"),
   exit: require("./exit.png"),
+  maps: require("./googleMaps.png"),
+  chrome: require("./googleChrome.png"),
 };

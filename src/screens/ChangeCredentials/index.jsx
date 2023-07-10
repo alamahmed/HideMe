@@ -10,8 +10,10 @@ import {
     NativeModules,
 } from "react-native";
 import styles from "./styles";
+import { normalized } from "../../utils/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import NavigationBtn from "../../components/NavigationBtn";
 import SmoothPinCodeInput from "react-native-smooth-pincode-input";
 import { images } from "../../assets/images";
 import { useDispatch } from "react-redux";
@@ -62,67 +64,76 @@ const ChangeCredentials = (props) => {
 
 
     return (
-        <View style={styles.container}>
+        <>
             <ImageBackground source={images.bg2} style={StyleSheet.absoluteFill} />
-            <View style={styles.centeredView}>
-                <View
-                    style={{
-                        padding: 20,
-                        flexDirection: "row",
-                        alignItems: "center",
-                    }}
-                >
-                    <TouchableOpacity onPress={handleBackButton}>
-                        <FontAwesomeIcon icon={faArrowLeft} size={20} color="#fff" />
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginVertical: normalized.hp("3%"),
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View
+                        style={{
+                            padding: 20,
+                            flexDirection: "row",
+                            alignItems: "center",
+                        }}
+                    >
+                        <TouchableOpacity onPress={handleBackButton}>
+                            <FontAwesomeIcon icon={faArrowLeft} size={20} color="#fff" />
+                        </TouchableOpacity>
+                        <Text style={{ color: "#fff", fontSize: 20, marginLeft: 10 }}>
+                            Back
+                        </Text>
+                    </View>
+                    <Image
+                        source={images.loginPass}
+                        style={styles.loginImg}
+                        resizeMode="center"
+                    />
+                    <Text style={styles.headline}>
+                        Enter new {isLoginWithPIN ? "Application" : "Android"} PIN here
+                    </Text>
+                    <View style={styles.cenTop}>
+                        {isLoginWithPIN ?
+                            <SmoothPinCodeInput
+                                ref={ref_PinInput}
+                                placeholder={<View style={styles.pinPlaceholder} />}
+                                mask={<View style={styles.pinMask} />}
+                                maskDelay={1000}
+                                password={true}
+                                cellStyle={styles.cellStyle}
+                                cellStyleFocused={styles.cellStyleFocused}
+                                cellSpacing={10}
+                                value={pin}
+                                onTextChange={(code) => setPin(code)}
+                            /> :
+                            <SmoothPinCodeInput
+                                ref={ref_PasswordInput}
+                                placeholder={<View style={styles.pinPlaceholder} />}
+                                mask={<View style={styles.pinMask} />}
+                                maskDelay={1000}
+                                password={true}
+                                cellStyle={styles.cellStyle}
+                                cellStyleFocused={styles.cellStyleFocused}
+                                cellSpacing={10}
+                                value={password}
+                                onTextChange={(val) => setPassword(val)}
+                            />
+                        }
+                    </View>
+                    <TouchableOpacity style={styles.btnLogin} onPress={() => onPressLogin()}>
+                        <Text style={{ fontWeight: "bold", fontSize: 20, color: "#000000" }}>
+                            Update {isLoginWithPIN ? "Application" : "Android"} PIN
+                        </Text>
                     </TouchableOpacity>
-                    <Text style={{ color: "#fff", fontSize: 20, marginLeft: 10 }}>
-                        Back
-                    </Text>
                 </View>
-                <Image
-                    source={images.loginPass}
-                    style={styles.loginImg}
-                    resizeMode="center"
-                />
-                <Text style={styles.headline}>
-                    Enter new {isLoginWithPIN ? "Application" : "Android"} PIN here
-                </Text>
-                <View style={styles.cenTop}>
-                    {isLoginWithPIN ?
-                        <SmoothPinCodeInput
-                            ref={ref_PinInput}
-                            placeholder={<View style={styles.pinPlaceholder} />}
-                            mask={<View style={styles.pinMask} />}
-                            maskDelay={1000}
-                            password={true}
-                            cellStyle={styles.cellStyle}
-                            cellStyleFocused={styles.cellStyleFocused}
-                            cellSpacing={10}
-                            value={pin}
-                            onTextChange={(code) => setPin(code)}
-                        /> :
-                        <SmoothPinCodeInput
-                            ref={ref_PasswordInput}
-                            placeholder={<View style={styles.pinPlaceholder} />}
-                            mask={<View style={styles.pinMask} />}
-                            maskDelay={1000}
-                            password={true}
-                            cellStyle={styles.cellStyle}
-                            cellStyleFocused={styles.cellStyleFocused}
-                            cellSpacing={10}
-                            value={password}
-                            onTextChange={(val) => setPassword(val)}
-                        />
-                    }
-                </View>
-
-                <TouchableOpacity style={styles.btnLogin} onPress={() => onPressLogin()}>
-                    <Text style={{ fontWeight: "bold", fontSize: 20, color: "#000000" }}>
-                        Update {isLoginWithPIN ? "Application" : "Android"} PIN
-                    </Text>
-                </TouchableOpacity>
             </View>
-        </View>
+            <NavigationBtn props={props} />
+        </>
     );
 }
 

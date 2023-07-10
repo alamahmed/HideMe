@@ -7,6 +7,7 @@ import { normalized } from "../../utils/constants";
 import styles from "./styles";
 import { images } from "../../assets/images";
 import { useSelector } from "react-redux";
+import NavigationBtn from "../../components/NavigationBtn";
 import InitNativeEvents from "../../events/NativeEvents";
 
 
@@ -46,74 +47,84 @@ const ValidateCredentials = (props) => {
     };
 
     return (
-        <View style={styles.container}>
+        <>
             <ImageBackground source={images.bg2} style={StyleSheet.absoluteFill} />
-            <View style={styles.centeredView}>
-                <View
-                    style={{
-                        padding: 20,
-                        flexDirection: "row",
-                        alignItems: "center",
-                    }}
-                >
-                    <TouchableOpacity onPress={handleBackButton}>
-                        <FontAwesomeIcon icon={faArrowLeft} size={20} color="#fff" />
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginVertical: normalized.hp("3%"),
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View
+                        style={{
+                            padding: 20,
+                            flexDirection: "row",
+                            alignItems: "center",
+                        }}
+                    >
+                        <TouchableOpacity onPress={handleBackButton}>
+                            <FontAwesomeIcon icon={faArrowLeft} size={20} color="#fff" />
+                        </TouchableOpacity>
+                        <Text style={{ color: "#fff", fontSize: 20, marginLeft: 10 }}>
+                            Back
+                        </Text>
+                    </View>
+                    <Image
+                        source={images.loginPass}
+                        style={styles.loginImg}
+                        resizeMode="center"
+                    />
+                    <Text style={styles.headline}>
+                        Enter {isLoginWithPIN ? "Application" : "Android"} Your Pin
+                    </Text>
+                    <View style={styles.cenTop}>
+                        {isLoginWithPIN ? (
+                            <SmoothPinCodeInput
+                                ref={ref_PinInput}
+                                placeholder={<View style={styles.pinPlaceholder} />}
+                                mask={<View style={styles.pinMask} />}
+                                maskDelay={1000}
+                                password={true}
+                                cellStyle={styles.cellStyle}
+                                cellStyleFocused={styles.cellStyleFocused}
+                                cellSpacing={10}
+                                value={pin}
+                                onTextChange={(code) => setPin(code)}
+                            />
+                        ) : (
+                            <SmoothPinCodeInput
+                                ref={ref_PasswordInput}
+                                placeholder={<View style={styles.pinPlaceholder} />}
+                                mask={<View style={styles.pinMask} />}
+                                maskDelay={1000}
+                                password={true}
+                                cellStyle={styles.cellStyle}
+                                cellStyleFocused={styles.cellStyleFocused}
+                                cellSpacing={10}
+                                value={password}
+                                onTextChange={(val) => setPassword(val)}
+                            />
+                        )}
+                    </View>
+                    <Text
+                        style={styles.txtLoginWith}
+                        onPress={() => setIsLoginWithPIN(!isLoginWithPIN)}
+                    >
+                        Change {isLoginWithPIN ? "Android" : "Application"} PIN
+                    </Text>
+                    <TouchableOpacity style={styles.btnLogin} onPress={checkCredentials}>
+                        <Text style={{ fontWeight: "bold", fontSize: 20, color: "#000000" }}>
+                            -&gt;
+                        </Text>
                     </TouchableOpacity>
-                    <Text style={{ color: "#fff", fontSize: 20, marginLeft: 10 }}>
-                        Back
-                    </Text>
-                </View>
-                <Image
-                    source={images.loginPass}
-                    style={styles.loginImg}
-                    resizeMode="center"
-                />
-                <Text style={styles.headline}>
-                    Enter {isLoginWithPIN ? "Application" : "Android"} Your Pin
-                </Text>
-                <View style={styles.cenTop}>
-                    {isLoginWithPIN ? (
-                        <SmoothPinCodeInput
-                            ref={ref_PinInput}
-                            placeholder={<View style={styles.pinPlaceholder} />}
-                            mask={<View style={styles.pinMask} />}
-                            maskDelay={1000}
-                            password={true}
-                            cellStyle={styles.cellStyle}
-                            cellStyleFocused={styles.cellStyleFocused}
-                            cellSpacing={10}
-                            value={pin}
-                            onTextChange={(code) => setPin(code)}
-                        />
-                    ) : (
-                        <SmoothPinCodeInput
-                            ref={ref_PasswordInput}
-                            placeholder={<View style={styles.pinPlaceholder} />}
-                            mask={<View style={styles.pinMask} />}
-                            maskDelay={1000}
-                            password={true}
-                            cellStyle={styles.cellStyle}
-                            cellStyleFocused={styles.cellStyleFocused}
-                            cellSpacing={10}
-                            value={password}
-                            onTextChange={(val) => setPassword(val)}
-                        />
-                    )}
-                </View>
-                <Text
-                    style={styles.txtLoginWith}
-                    onPress={() => setIsLoginWithPIN(!isLoginWithPIN)}
-                >
-                    Change {isLoginWithPIN ? "Android" : "Application"} PIN
-                </Text>
-                <TouchableOpacity style={styles.btnLogin} onPress={checkCredentials}>
-                    <Text style={{ fontWeight: "bold", fontSize: 20, color: "#000000" }}>
-                        -&gt;
-                    </Text>
-                </TouchableOpacity>
 
-            </View>
-        </View>
+                </View>
+            </View >
+            <NavigationBtn props={props} />
+        </>
     );
 };
 

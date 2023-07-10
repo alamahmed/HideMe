@@ -7,18 +7,18 @@ import {
   ImageBackground,
   StyleSheet,
   Linking,
+  BackHandler,
 } from "react-native";
 import { launchCamera } from "react-native-image-picker";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { images } from "../../assets/images";
+import NavigationBtn from "../../components/NavigationBtn/index"
 import { addImageToGallery } from "../../redux/slices/gallerySlice";
 import { normalized } from "../../utils/constants";
 import moment from "moment";
 
 const Dashboard = (props) => {
-  const { galleryImages } = useSelector((state) => state.galleryReducer); // getting the gallery
   const dispatch = useDispatch(); // will use dispatch to call actions
-  // console.log("gallery", galleryImages);
   const onImageClick = () => {
     launchCamera({ mediaType: "photo", quality: 1 })
       .then((res) => {
@@ -30,7 +30,7 @@ const Dashboard = (props) => {
       .catch((error) => console.log("ERROR launchCamera", error));
   };
   const [currentTime, setCurrentTime] = useState(new Date());
-
+  const [count, setCount] = useState(1);
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
@@ -38,10 +38,10 @@ const Dashboard = (props) => {
 
   const hours = currentTime.getHours().toString().padStart(2, "0");
   const minutes = currentTime.getMinutes().toString().padStart(2, "0");
-  const seconds = currentTime.getSeconds().toString().padStart(2, "0");
   const ampm = hours >= 12 ? "PM" : "AM";
   const displayHours = hours % 12 || 12;
   const date = moment(new Date()).format("ddd, MMM Do, YYYY");
+
   return (
     <>
       <ImageBackground source={images.bg2} style={StyleSheet.absoluteFill} />
@@ -53,7 +53,7 @@ const Dashboard = (props) => {
         }}
       >
         <View>
-          <View
+          <TouchableOpacity
             style={{
               height: normalized.hp("12%"),
               width: normalized.wp("55%"),
@@ -66,20 +66,28 @@ const Dashboard = (props) => {
               padding: normalized.hp("3%"),
               alignItems: "center",
             }}
+            onPress={() => {
+              setCount(count + 1);
+              console.log(count);
+              if (count == 10) {
+                setCount(1);
+                props?.navigation?.navigate("Setting");
+              }
+            }}
           >
             <View style={{ marginLeft: normalized.wp("1%") }}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Text style={{ color: "white", fontSize: 25 }}>
                   {`${displayHours}:${minutes} `}
                 </Text>
-
                 <Text style={{ color: "white", fontSize: 15 }}>
                   {`${ampm}`}
                 </Text>
               </View>
               <Text style={{ color: "white", fontSize: 15 }}>{date}</Text>
             </View>
-          </View>
+          </TouchableOpacity>
+          {/* Google */}
           <TouchableOpacity
             style={{
               borderRadius: 10,
@@ -88,7 +96,17 @@ const Dashboard = (props) => {
               width: normalized.wp("100%"),
               alignSelf: "center",
             }}
-            onPress={() => Linking.openURL("https://www.google.com")}
+            onPress={() => {
+              BackHandler.removeEventListener();
+
+              console.log("ali");
+              BackHandler.exitApp();
+              console.log("ali1");
+
+              console.log("ali2");
+
+              Linking.openURL("https://www.google.com");
+            }}
           >
             <Image
               source={images.google}
@@ -99,15 +117,17 @@ const Dashboard = (props) => {
               resizeMode="cover"
             />
           </TouchableOpacity>
+
           <View
             style={{
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              // flexWrap: "wrap",
             }}
           >
+            {/* Top Buttons */}
             <View style={{ flexDirection: "row", alignItems: "center" }}>
+              {/* Gallery Button */}
               <TouchableOpacity
                 style={{
                   borderRadius: 10,
@@ -132,7 +152,8 @@ const Dashboard = (props) => {
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity
+              {/* Settings Button */}
+              <View
                 style={{
                   borderRadius: 10,
                   padding: normalized.wp("1%"),
@@ -140,9 +161,6 @@ const Dashboard = (props) => {
                   alignItems: "center",
                   width: normalized.wp("15%"),
                   marginLeft: normalized.wp("2%"),
-                }}
-                onPress={() => {
-                  props?.navigation?.navigate("Setting");
                 }}
               >
                 <Image
@@ -153,10 +171,76 @@ const Dashboard = (props) => {
                   }}
                   resizeMode="center"
                 />
+              </View>
+
+              {/* Maps Button */}
+              <TouchableOpacity
+                style={{
+                  borderRadius: 10,
+                  padding: normalized.wp("1%"),
+                  paddingVertical: normalized.hp("1%"),
+                  alignItems: "center",
+                  width: normalized.wp("15%"),
+                  marginLeft: normalized.wp("2%"),
+                }}
+                onPress={() => {
+                  BackHandler.removeEventListener();
+
+                  console.log("ali");
+                  BackHandler.exitApp();
+                  console.log("ali1");
+
+                  console.log("ali2");
+
+                  Linking.openURL("google.navigation:");
+                }}
+              >
+                <Image
+                  source={images.maps}
+                  style={{
+                    width: normalized.wp("11%"),
+                    height: normalized.wp("11%"),
+                  }}
+                  resizeMode="center"
+                />
+              </TouchableOpacity>
+
+              {/* Chrome Button */}
+              <TouchableOpacity
+                style={{
+                  borderRadius: 10,
+                  padding: normalized.wp("1%"),
+                  paddingVertical: normalized.hp("1%"),
+                  alignItems: "center",
+                  width: normalized.wp("15%"),
+                  marginLeft: normalized.wp("2%"),
+                }}
+                onPress={() => {
+                  BackHandler.removeEventListener();
+
+                  console.log("ali");
+                  BackHandler.exitApp();
+                  console.log("ali1");
+
+                  console.log("ali2");
+
+                  Linking.openURL("https://www.google.com");
+
+                }}
+              >
+                <Image
+                  source={images.chrome}
+                  style={{
+                    width: normalized.wp("11%"),
+                    height: normalized.wp("11%"),
+                  }}
+                  resizeMode="center"
+                />
               </TouchableOpacity>
             </View>
           </View>
         </View>
+        {/* Bottom Buttons */}
         <View
           style={{
             marginHorizontal: normalized.hp("3%"),
@@ -165,6 +249,7 @@ const Dashboard = (props) => {
             alignItems: "center",
           }}
         >
+          {/* PhoneBook Button */}
           <TouchableOpacity
             style={{
               borderRadius: 10,
@@ -174,9 +259,18 @@ const Dashboard = (props) => {
               width: normalized.wp("15%"),
               marginLeft: normalized.wp("2%"),
             }}
-            onPress={
-              () => Linking.openURL("tel:")
-            }
+            onPress={() => {
+              BackHandler.removeEventListener();
+
+              console.log("ali");
+              BackHandler.exitApp();
+              console.log("ali1");
+
+              console.log("ali2");
+
+
+              Linking.openURL("tel:");
+            }}
           >
             <Image
               source={images.phone}
@@ -187,6 +281,7 @@ const Dashboard = (props) => {
               resizeMode="center"
             />
           </TouchableOpacity>
+          {/* Camera Button */}
           <TouchableOpacity
             style={{
               borderRadius: 10,
@@ -206,7 +301,7 @@ const Dashboard = (props) => {
               resizeMode="center"
             />
           </TouchableOpacity>
-
+          {/* Whatsapp Button */}
           <TouchableOpacity
             style={{
               borderRadius: 10,
@@ -218,6 +313,14 @@ const Dashboard = (props) => {
             }}
             onPress={() => {
               if (Linking.canOpenURL("whatsapp://send")) {
+                BackHandler.removeEventListener();
+
+                console.log("ali");
+                BackHandler.exitApp();
+                console.log("ali1");
+
+                console.log("ali2");
+
                 Linking.openURL(
                   "whatsapp://send?text=Welcome%20to%20my%20chat&app=whatsapp"
                 );
@@ -235,6 +338,7 @@ const Dashboard = (props) => {
               resizeMode="center"
             />
           </TouchableOpacity>
+          {/* Facebook Button */}
           <TouchableOpacity
             style={{
               borderRadius: 10,
@@ -245,12 +349,16 @@ const Dashboard = (props) => {
               marginLeft: normalized.wp("2%"),
             }}
             onPress={() => {
-              console.log("Facebook btn pressed");
-              Linking.openURL(
-                "fb://page/"
-              )
-            }
-            }
+              BackHandler.removeEventListener();
+
+              console.log("ali");
+              BackHandler.exitApp();
+              console.log("ali1");
+
+              console.log("ali2");
+
+              Linking.openURL("fb://page/");
+            }}
           >
             <Image
               source={images.facebook}
@@ -263,6 +371,7 @@ const Dashboard = (props) => {
           </TouchableOpacity>
         </View>
       </View>
+      <NavigationBtn props={props} />
     </>
   );
 };

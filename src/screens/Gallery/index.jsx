@@ -7,6 +7,7 @@ import {
   ImageBackground,
 } from "react-native";
 import ImageView from "react-native-image-viewing";
+import NavigationBtn from "../../components/NavigationBtn/index"
 import { FlatGrid } from "react-native-super-grid";
 import FastImage from "react-native-fast-image";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -153,6 +154,7 @@ const Gallery = (props) => {
           backgroundColor="#fff"
         />
       </View>
+      <NavigationBtn props={props} />
     </View >
   );
 };

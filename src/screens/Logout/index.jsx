@@ -9,6 +9,7 @@ import {
     StyleSheet,
     BackHandler,
 } from "react-native";
+import NavigationBtn from "../../components/NavigationBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { normalized } from "../../utils/constants";
@@ -40,8 +41,15 @@ const Logout = (props) => {
 
     return (
         <>
-            <View style={styles.container}>
-                <ImageBackground source={images.bg2} style={StyleSheet.absoluteFill} />
+            <ImageBackground source={images.bg2} style={StyleSheet.absoluteFill} />
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginVertical: normalized.hp("3%"),
+                }}
+            >
                 <View style={styles.centeredView}>
                     <View
                         style={{
@@ -86,6 +94,7 @@ const Logout = (props) => {
                     </TouchableOpacity>
                 </View>
             </View >
+            <NavigationBtn props={props} />
         </>
     );
 }

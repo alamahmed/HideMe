@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
     textAlign: 'center', // <-- the magic
     fontWeight: 'bold',
     textAlignVertical: "center",
-    textAlign: "center",
     color: AppColors.white.white,
   },
 });
